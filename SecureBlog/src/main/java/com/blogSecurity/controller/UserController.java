@@ -26,7 +26,6 @@ public class UserController {
 
     @PostMapping("/sign-in")
     public ResponseEntity<String> loginUser(@RequestBody Login login){
-        log.info("Login details == {}",login);
         return new ResponseEntity<>(userServiceImpl.loginUser(login), HttpStatus.OK);
     }
 }

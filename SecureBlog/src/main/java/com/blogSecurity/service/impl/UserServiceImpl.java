@@ -8,9 +8,11 @@ import com.blogSecurity.model.Users;
 import com.blogSecurity.repository.RoleRepository;
 import com.blogSecurity.repository.UserRepository;
 import com.blogSecurity.security.CustomUserDetailService;
+import com.blogSecurity.security.JWTAuthenticationProvider;
 import com.blogSecurity.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -28,8 +30,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final CustomUserDetailService customUserDetailService;
-    private final DaoAuthenticationProvider daoAuthenticationProvider;
+    private final AuthenticationManager authenticationManager;
+    private final JWTAuthenticationProvider jwtAuthenticationProvider;
 
 
     @Override
@@ -59,11 +61,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String loginUser(Login login){
-        UserDetails userDetails = customUserDetailService.loadUserByUsername(login.getUsername());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                login.getUsername(),login.getPassword());
-        authentication = daoAuthenticationProvider.authenticate(authentication);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "User Login Successful";
+        return jwtAuthenticationProvider.generateToken(authentication);
     }
 }
