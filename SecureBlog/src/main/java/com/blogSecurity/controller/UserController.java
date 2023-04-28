@@ -1,7 +1,8 @@
 package com.blogSecurity.controller;
 
-import com.blogSecurity.dto.Login;
-import com.blogSecurity.dto.SignUp;
+import com.blogSecurity.dto.request.Login;
+import com.blogSecurity.dto.request.SignUp;
+import com.blogSecurity.dto.response.UserResponse;
 import com.blogSecurity.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<String> registerUser(@RequestBody SignUp signUp){
+    public ResponseEntity<UserResponse> registerUser(@RequestBody SignUp signUp){
         return new ResponseEntity<>(userServiceImpl.registerUser(signUp), HttpStatus.CREATED);
     }
 

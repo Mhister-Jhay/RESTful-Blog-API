@@ -1,10 +1,11 @@
 package com.blogSecurity.service;
 
-import com.blogSecurity.dto.Login;
-import com.blogSecurity.dto.SignUp;
+import com.blogSecurity.dto.request.Login;
+import com.blogSecurity.dto.request.SignUp;
+import com.blogSecurity.dto.response.UserResponse;
 
 public interface UserService {
-    String registerUser(SignUp signUp);
+    UserResponse registerUser(SignUp signUp);
 
     String loginUser(Login login);
 }
