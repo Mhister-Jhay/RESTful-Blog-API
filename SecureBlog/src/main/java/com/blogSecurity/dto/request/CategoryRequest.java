@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class Login {
-    @NotBlank(message = "Username must not be blank")
-    private String username;
-    @NotBlank(message = "Password must not be blank")
-    private String password;
+public class CategoryRequest {
+    @NotBlank(message = "Category must not be blank")
+    private String name;
 }

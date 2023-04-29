@@ -33,4 +33,6 @@ public class User {
     private Roles role;
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
+    @OneToMany(mappedBy = "user",orphanRemoval = true,cascade = CascadeType.REMOVE)
+    private Set<Posts> posts;
 }

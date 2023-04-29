@@ -1,7 +1,9 @@
 package com.blogSecurity;
 
+import com.blogSecurity.dto.request.SignUp;
 import com.blogSecurity.model.Roles;
 import com.blogSecurity.repository.RoleRepository;
+import com.blogSecurity.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.ApplicationArguments;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class SecureBlogApplication implements ApplicationRunner {
 	private final RoleRepository roleRepository;
+//	private final UserServiceImpl userServiceImpl;
 
 	@Bean
 	public ModelMapper modelMapper(){
@@ -39,5 +42,29 @@ public class SecureBlogApplication implements ApplicationRunner {
 		roleRepository.save(role1);
 		roleRepository.save(role2);
 		roleRepository.save(role3);
+
+//		SignUp user1 = SignUp.builder()
+//				.email("admin@admin.com")
+//				.fullName("Blog Super Admin")
+//				.username("admin")
+//				.password("adminPassword")
+//				.build();
+//
+//		SignUp user2 = SignUp.builder()
+//				.email("admin@blog.com")
+//				.fullName("Blog Admin")
+//				.username("adminRoleJosh")
+//				.password("admin111Password")
+//				.build();
+//
+//		SignUp user3 = SignUp.builder()
+//				.email("josh@gmail.com")
+//				.fullName("Blog User")
+//				.username("jhayT")
+//				.password("password")
+//				.build();
+//		userServiceImpl.registerUser(user1);
+//		userServiceImpl.registerUser(user2);
+//		userServiceImpl.registerUser(user3);
 	}
 }
