@@ -23,6 +23,10 @@ public class Posts {
     private String description;
     @Column(nullable = false)
     private String content;
+    private String createdAt;
+    private String publishedAt;
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "post_category",
@@ -35,9 +39,7 @@ public class Posts {
                     referencedColumnName = "id"
             )
     )
-    private Set<Category> categories;
-    @Enumerated(EnumType.STRING)
-    private PostStatus status;
+    private Set<Tag> tags;
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(
             name = "user_id",

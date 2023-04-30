@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class CategoryResponse {
+public class TagResponse {
     private Long id;
     private String name;
 }

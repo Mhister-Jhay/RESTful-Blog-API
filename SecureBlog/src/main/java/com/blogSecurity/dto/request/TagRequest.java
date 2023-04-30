@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class CategoryRequest {
+public class TagRequest {
     @NotBlank(message = "Category must not be blank")
     private String name;
 }

@@ -17,7 +17,10 @@ public class PostResponse {
     private String title;
     private String description;
     private String content;
-    private Set<CategoryResponse> categories;
+    private String createdAt;
+    private String publishedAt;
     private PostStatus status;
+    private Set<TagResponse> tags;
+
     private UserResponse user;
 }

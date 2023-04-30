@@ -12,12 +12,12 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "category")
-public class Category {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false,unique = true)
     private String name;
-    @ManyToMany(mappedBy = "categories", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.REMOVE)
     private Set<Posts> posts;
 }

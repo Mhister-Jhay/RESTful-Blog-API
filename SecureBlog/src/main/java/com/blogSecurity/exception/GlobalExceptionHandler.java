@@ -49,7 +49,29 @@ public class GlobalExceptionHandler {
                 .build();
         return new ResponseEntity<>(exceptionResponse,HttpStatus.UNAUTHORIZED);
     }
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> restricted(RestrictedAccessException e,
+                                                          HttpServletRequest request){
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .errorMessage(e.getMessage())
+                .errorPath(request.getRequestURI())
+                .errorStatusCode(HttpStatus.FORBIDDEN.value())
+                .errorTime(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.FORBIDDEN);
+    }
 
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> approval(ResourceApprovalException e,
+                                                        HttpServletRequest request){
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .errorMessage(e.getMessage())
+                .errorPath(request.getRequestURI())
+                .errorStatusCode(HttpStatus.PROCESSING.value())
+                .errorTime(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.PROCESSING);
+    }
     @ExceptionHandler
     public ResponseEntity<Object> invalid(MethodArgumentNotValidException e,
                                           HttpServletRequest request){

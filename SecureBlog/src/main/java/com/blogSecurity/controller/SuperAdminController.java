@@ -1,8 +1,8 @@
 package com.blogSecurity.controller;
 
-import com.blogSecurity.dto.request.CategoryRequest;
-import com.blogSecurity.dto.response.CategoryResponse;
-import com.blogSecurity.service.impl.CategoryServiceImpl;
+import com.blogSecurity.dto.request.TagRequest;
+import com.blogSecurity.dto.response.TagResponse;
+import com.blogSecurity.service.impl.TagServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('SUPER_ADMIN')")
 public class SuperAdminController {
-    private final CategoryServiceImpl categoryServiceImpl;
+    private final TagServiceImpl tagServiceImpl;
 
     @PostMapping("/categories")
-    public ResponseEntity<CategoryResponse> createNewCategory(@Valid @RequestBody CategoryRequest categoryRequest){
-        return new ResponseEntity<>(categoryServiceImpl.createNewCategory(categoryRequest), HttpStatus.CREATED);
+    public ResponseEntity<TagResponse> createNewCategory(@Valid @RequestBody TagRequest tagRequest){
+        return new ResponseEntity<>(tagServiceImpl.createNewCategory(tagRequest), HttpStatus.CREATED);
     }
     @DeleteMapping("/categories/{categoryId}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId){
-        return new ResponseEntity<>(categoryServiceImpl.deleteCategory(categoryId),HttpStatus.OK);
+        return new ResponseEntity<>(tagServiceImpl.deleteCategory(categoryId),HttpStatus.OK);
     }
 
 }
