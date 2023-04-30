@@ -24,6 +24,5 @@ public class PostRequest {
     @NotBlank(message = "Content must not be blank")
     @Size(min = 10, message = "Content must contain at least 10 characters")
     private String content;
-    @Min(value = 1, message = "Post should have at least 1 tag")
     private Set<TagRequest> tags;
 }
