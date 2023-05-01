@@ -40,6 +40,9 @@ public class Posts {
             )
     )
     private Set<Tag> tags;
+    private Long commentCount;
+    @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE,orphanRemoval = true)
+    private Set<Comment> comments;
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(
             name = "user_id",

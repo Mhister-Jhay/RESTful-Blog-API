@@ -59,6 +59,7 @@ public class PostServiceImpl implements PostService {
                 .createdAt(saveLocalDate(LocalDateTime.now()))
                 .status(PostStatus.PENDING)
                 .tags(tags)
+                .commentCount(0L)
                 .user(user)
                 .build()));
     }
@@ -107,6 +108,8 @@ public class PostServiceImpl implements PostService {
     // User
     @Override
     public PostResponse getSinglePost(Long postId){
+        User user = UserDetails.getLoggedInUser();
+        checkBannedUser(user);
         Posts posts = findPostById(postId);
         checkApprovedStatus(posts);
         return mapToResponse(posts);
@@ -121,6 +124,7 @@ public class PostServiceImpl implements PostService {
         checkApprovedStatus(posts);
         checkPostOwner(posts,user);
         posts.setTags(null);
+        posts.setComments(null);
         postRepository.delete(posts);
         return "Post with id ("+postId+") deleted Successfully";
     }
@@ -132,6 +136,7 @@ public class PostServiceImpl implements PostService {
         Posts posts = findPostById(postId);
         checkFlaggedStatus(posts);
         posts.setTags(null);
+        posts.setComments(null);
         postRepository.delete(posts);
         return "Post with id ("+postId+") deleted Successfully";
     }
@@ -157,6 +162,8 @@ public class PostServiceImpl implements PostService {
     // User
     @Override
     public PageResponse viewPostsByTag(int pageNo, int pageSize, String sortBy, String sortDir, String tag){
+        User user = UserDetails.getLoggedInUser();
+        checkBannedUser(user);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Tag mainTag = findTagByName(tag);
@@ -169,6 +176,8 @@ public class PostServiceImpl implements PostService {
     // User
     @Override
     public PageResponse viewPostsByUser(int pageNo, int pageSize, String sortBy, String sortDir, Long userId) {
+        User userLoggedIn = UserDetails.getLoggedInUser();
+        checkBannedUser(userLoggedIn);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         User user = userRepository.findById(userId).orElseThrow(()->
@@ -182,6 +191,8 @@ public class PostServiceImpl implements PostService {
     // User
     @Override
     public PageResponse viewAllPost(int pageNo, int pageSize, String sortBy, String sortDir) {
+        User user = UserDetails.getLoggedInUser();
+        checkBannedUser(user);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Page<Posts> postsPage = postRepository.findAllByStatus(PostStatus.APPROVED,
@@ -206,6 +217,11 @@ public class PostServiceImpl implements PostService {
     }
     private void checkUserStatus(User user){
         if(user.getStatus().equals(AccountStatus.BANNED) || user.getStatus().equals(AccountStatus.SUSPENDED)){
+            throw new RestrictedAccessException("Account has been restricted from this function");
+        }
+    }
+    private void checkBannedUser(User user){
+        if(user.getStatus().equals(AccountStatus.BANNED)){
             throw new RestrictedAccessException("Account has been restricted from this function");
         }
     }

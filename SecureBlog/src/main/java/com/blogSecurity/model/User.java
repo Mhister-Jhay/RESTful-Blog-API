@@ -35,4 +35,6 @@ public class User {
     private AccountStatus status;
     @OneToMany(mappedBy = "user",orphanRemoval = true,cascade = CascadeType.REMOVE)
     private Set<Posts> posts;
+    @OneToMany(mappedBy = "user",orphanRemoval = true,cascade = CascadeType.REMOVE)
+    private Set<Comment> comments;
 }

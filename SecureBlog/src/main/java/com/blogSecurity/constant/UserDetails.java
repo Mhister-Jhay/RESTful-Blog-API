@@ -22,7 +22,6 @@ public final class UserDetails {
         if (authentication != null && authentication.isAuthenticated())
         {
             String username = authentication.getName();
-            System.out.println("Authorized user " +username);
             return userRepository.findByUsername(username).orElseThrow();
         } else {
             throw new UnauthorizedException("No authentication provided");
