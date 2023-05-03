@@ -3,20 +3,21 @@ package com.blogSecurity.controller;
 import com.blogSecurity.constant.PageConstant;
 import com.blogSecurity.dto.request.CommentRequest;
 import com.blogSecurity.dto.request.PostRequest;
-import com.blogSecurity.dto.response.CommentResponse;
-import com.blogSecurity.dto.response.PageResponse;
-import com.blogSecurity.dto.response.PostResponse;
-import com.blogSecurity.dto.response.TagResponse;
+import com.blogSecurity.dto.response.*;
+import com.blogSecurity.service.impl.ImageServiceImpl;
 import com.blogSecurity.service.impl.CommentServiceImpl;
 import com.blogSecurity.service.impl.PostServiceImpl;
 import com.blogSecurity.service.impl.TagServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,7 @@ public class UserController {
     private final TagServiceImpl tagServiceImpl;
     private final PostServiceImpl postServiceImpl;
     private final CommentServiceImpl commentServiceImpl;
+    private final ImageServiceImpl imageServiceImpl;
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
     @GetMapping("/categories")
     public ResponseEntity<List<TagResponse>> viewCategories(){
@@ -115,4 +117,17 @@ public class UserController {
         return new ResponseEntity<>(commentServiceImpl.getPostComments(
                 pageNo,pageSize,sortBy,sortDir,postId),HttpStatus.OK);
     }
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping(value = "/posts/{postId}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ImageResponse> addImageToPost(@PathVariable Long postId,
+                                                        @RequestParam("image")MultipartFile image) throws IOException {
+        return new ResponseEntity<>(imageServiceImpl.addImageToPost(postId,image),HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/posts/{postId}/images")
+    public ResponseEntity<List<ImageResponse>> getPostImages(@PathVariable Long postId){
+        return imageServiceImpl.getPostImages(postId);
+    }
+
 }

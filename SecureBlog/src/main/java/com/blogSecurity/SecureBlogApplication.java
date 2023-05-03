@@ -2,7 +2,9 @@ package com.blogSecurity;
 
 import com.blogSecurity.dto.request.SignUp;
 import com.blogSecurity.model.Roles;
+import com.blogSecurity.model.Tag;
 import com.blogSecurity.repository.RoleRepository;
+import com.blogSecurity.repository.TagRepository;
 import com.blogSecurity.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class SecureBlogApplication implements ApplicationRunner {
 	private final RoleRepository roleRepository;
+	private final TagRepository tagRepository;
 //	private final UserServiceImpl userServiceImpl;
 
 	@Bean
@@ -36,12 +39,15 @@ public class SecureBlogApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		Roles role1 = Roles.builder().name("SUPER_ADMIN").build();
-		Roles role2 = Roles.builder().name("ADMIN").build();
-		Roles role3 = Roles.builder().name("USER").build();
-		roleRepository.save(role1);
-		roleRepository.save(role2);
-		roleRepository.save(role3);
+//		Roles role1 = Roles.builder().name("SUPER_ADMIN").build();
+//		Roles role2 = Roles.builder().name("ADMIN").build();
+//		Roles role3 = Roles.builder().name("USER").build();
+//		roleRepository.save(role1);
+//		roleRepository.save(role2);
+//		roleRepository.save(role3);
+//
+//		Tag tag1 = Tag.builder().name("FASHION").build();
+//		tagRepository.save(tag1);
 
 //		SignUp user1 = SignUp.builder()
 //				.email("admin@admin.com")

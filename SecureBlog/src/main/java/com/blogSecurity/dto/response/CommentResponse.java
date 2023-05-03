@@ -1,6 +1,6 @@
 package com.blogSecurity.dto.response;
 
-import com.blogSecurity.enums.CommentStatus;
+import com.blogSecurity.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class CommentResponse {
     private Long id;
     private String body;
-    private CommentStatus status;
+    private Status status;
     private UserResponse user;
     private PostResponse post;
 }

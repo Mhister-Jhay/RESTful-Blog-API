@@ -8,7 +8,7 @@ public interface CommentService {
     CommentResponse createNewComment(Long postId, CommentRequest commentRequest);
 
     // Admin
-    CommentResponse flagComment(Long commedtId);
+    CommentResponse flagComment(Long commentId);
 
     // Admin
     String deleteCommentAdmin(Long commentId);

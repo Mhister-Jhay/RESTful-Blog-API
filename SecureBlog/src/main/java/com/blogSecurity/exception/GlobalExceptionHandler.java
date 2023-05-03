@@ -67,10 +67,10 @@ public class GlobalExceptionHandler {
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .errorMessage(e.getMessage())
                 .errorPath(request.getRequestURI())
-                .errorStatusCode(HttpStatus.PROCESSING.value())
+                .errorStatusCode(HttpStatus.NOT_FOUND.value())
                 .errorTime(LocalDateTime.now())
                 .build();
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.PROCESSING);
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler
     public ResponseEntity<Object> invalid(MethodArgumentNotValidException e,

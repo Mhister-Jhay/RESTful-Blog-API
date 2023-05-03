@@ -1,6 +1,6 @@
 package com.blogSecurity.model;
 
-import com.blogSecurity.enums.PostStatus;
+import com.blogSecurity.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +26,7 @@ public class Posts {
     private String createdAt;
     private String publishedAt;
     @Enumerated(EnumType.STRING)
-    private PostStatus status;
+    private Status status;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "post_category",
@@ -49,5 +49,7 @@ public class Posts {
             referencedColumnName = "id"
     )
     private User user;
+    @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE,orphanRemoval = true)
+    private Set<Image> image;
 
 }

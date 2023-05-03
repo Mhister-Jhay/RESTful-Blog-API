@@ -1,6 +1,6 @@
 package com.blogSecurity.dto.response;
 
-import com.blogSecurity.enums.PostStatus;
+import com.blogSecurity.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class PostResponse {
     private String content;
     private String createdAt;
     private String publishedAt;
-    private PostStatus status;
+    private Status status;
     private Set<TagResponse> tags;
 
     private UserResponse user;

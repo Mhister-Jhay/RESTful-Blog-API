@@ -2,9 +2,11 @@ package com.blogSecurity.controller;
 
 import com.blogSecurity.constant.PageConstant;
 import com.blogSecurity.dto.response.CommentResponse;
+import com.blogSecurity.dto.response.ImageResponse;
 import com.blogSecurity.dto.response.PageResponse;
 import com.blogSecurity.dto.response.PostResponse;
 import com.blogSecurity.service.impl.CommentServiceImpl;
+import com.blogSecurity.service.impl.ImageServiceImpl;
 import com.blogSecurity.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     private final PostServiceImpl postServiceImpl;
     private final CommentServiceImpl commentServiceImpl;
+    private final ImageServiceImpl imageServiceImpl;
 
     @PostMapping("/posts/{postId}/tags/")
     public ResponseEntity<PostResponse> addTagToPost(@PathVariable Long postId,
@@ -82,5 +85,20 @@ public class AdminController {
             @PathVariable Long postId, @RequestParam("status") String status){
      return new ResponseEntity<>(commentServiceImpl.getPostCommentsByStatus(
              pageNo,pageSize,sortBy,sortDir,postId,status),HttpStatus.OK);
+    }
+
+    @PatchMapping("/images/approve/{imageId}")
+    public ResponseEntity<ImageResponse> approveImage(@PathVariable Long imageId){
+        return new ResponseEntity<>(imageServiceImpl.approveImage(imageId), HttpStatus.OK);
+    }
+
+    @PatchMapping("/images/flag/{imageId}")
+    public ResponseEntity<ImageResponse> flagImage(@PathVariable Long imageId){
+        return new ResponseEntity<>(imageServiceImpl.flagImage(imageId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/images/delete/{imageId}")
+    public ResponseEntity<String> deleteImage(@PathVariable Long imageId){
+        return new ResponseEntity<>(imageServiceImpl.deleteImage(imageId),HttpStatus.OK);
     }
 }

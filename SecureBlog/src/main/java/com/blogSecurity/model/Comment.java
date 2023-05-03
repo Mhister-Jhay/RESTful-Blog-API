@@ -1,6 +1,6 @@
 package com.blogSecurity.model;
 
-import com.blogSecurity.enums.CommentStatus;
+import com.blogSecurity.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +18,7 @@ public class Comment {
     @Column(nullable = false,unique = true)
     private String body;
     @Enumerated(EnumType.STRING)
-    private CommentStatus status;
+    private Status status;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(
             name = "user_id",

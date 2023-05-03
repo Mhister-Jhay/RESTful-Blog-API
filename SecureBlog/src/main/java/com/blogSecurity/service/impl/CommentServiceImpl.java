@@ -5,8 +5,7 @@ import com.blogSecurity.dto.request.CommentRequest;
 import com.blogSecurity.dto.response.CommentResponse;
 import com.blogSecurity.dto.response.PageResponse;
 import com.blogSecurity.enums.AccountStatus;
-import com.blogSecurity.enums.CommentStatus;
-import com.blogSecurity.enums.PostStatus;
+import com.blogSecurity.enums.Status;
 import com.blogSecurity.exception.*;
 import com.blogSecurity.model.Comment;
 import com.blogSecurity.model.Posts;
@@ -46,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
                         .body(commentRequest.getBody())
                         .user(user)
                         .post(posts)
-                        .status(CommentStatus.PENDING)
+                        .status(Status.PENDING)
                         .build()));
     }
 
@@ -54,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponse flagComment(Long commentId){
         Comment comment = findCommentById(commentId);
-        comment.setStatus(CommentStatus.FLAGGED);
+        comment.setStatus(Status.FLAGGED);
         return mapToResponse(commentRepository.save(comment));
     }
     // Admin
@@ -71,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponse publishComment(Long commentId){
         Comment comment = findCommentById(commentId);
-        comment.setStatus(CommentStatus.APPROVED);
+        comment.setStatus(Status.APPROVED);
         Posts posts = comment.getPost();
         posts.setCommentCount(posts.getCommentCount() + 1);
         return mapToResponse(commentRepository.save(comment));
@@ -87,7 +86,7 @@ public class CommentServiceImpl implements CommentService {
         checkUserStatus(user);
         checkCommentOwner(comment,user);
         comment.setBody(commentRequest.getBody());
-        comment.setStatus(CommentStatus.MODIFIED);
+        comment.setStatus(Status.MODIFIED);
         Posts posts = comment.getPost();
         posts.setCommentCount(posts.getCommentCount()-1);
         return mapToResponse(commentRepository.save(comment));
@@ -115,7 +114,7 @@ public class CommentServiceImpl implements CommentService {
                 : Sort.by(sortBy).descending();
         Posts posts = findPostById(postId);
         Page<Comment> commentPage = commentRepository.findAllByPostAndStatus(
-                posts, CommentStatus.APPROVED, PageRequest.of(pageNo,pageSize,sort));
+                posts, Status.APPROVED, PageRequest.of(pageNo,pageSize,sort));
         List<CommentResponse> commentResponses = commentPage.getContent()
                 .stream().map(this::mapToResponse).toList();
         return getPage(commentResponses,commentPage);
@@ -130,7 +129,7 @@ public class CommentServiceImpl implements CommentService {
                 : Sort.by(sortBy).descending();
         Posts posts = findPostById(postId);
         Page<Comment> commentPage = commentRepository.findAllByPostAndStatus(
-                posts, CommentStatus.valueOf(status.toUpperCase()), PageRequest.of(pageNo,pageSize,sort));
+                posts, Status.valueOf(status.toUpperCase()), PageRequest.of(pageNo,pageSize,sort));
         List<CommentResponse> commentResponses = commentPage.getContent()
                 .stream().map(this::mapToResponse).toList();
         return getPage(commentResponses,commentPage);
@@ -161,17 +160,17 @@ public class CommentServiceImpl implements CommentService {
         }
     }
     private void checkFlaggedStatus(Comment comment){
-        if(!comment.getStatus().equals(CommentStatus.FLAGGED)){
+        if(!comment.getStatus().equals(Status.FLAGGED)){
             throw new UnauthorizedException("Comment is not flagged, Unable to delete comment");
         }
     }
     private void checkApprovedStatus(Comment comment){
-        if(!comment.getStatus().equals(CommentStatus.APPROVED)){
+        if(!comment.getStatus().equals(Status.APPROVED)){
             throw new UnauthorizedException("Comment is awaiting approval");
         }
     }
     private void checkPostApprovedStatus(Posts posts){
-        if(!posts.getStatus().equals(PostStatus.APPROVED)){
+        if(!posts.getStatus().equals(Status.APPROVED)){
             throw new ResourceApprovalException("Post awaiting approval");
         }
     }

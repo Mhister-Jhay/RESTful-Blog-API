@@ -6,7 +6,7 @@ import com.blogSecurity.dto.request.TagRequest;
 import com.blogSecurity.dto.response.PageResponse;
 import com.blogSecurity.dto.response.PostResponse;
 import com.blogSecurity.enums.AccountStatus;
-import com.blogSecurity.enums.PostStatus;
+import com.blogSecurity.enums.Status;
 import com.blogSecurity.exception.*;
 import com.blogSecurity.model.Posts;
 import com.blogSecurity.model.Tag;
@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
                 .description(postRequest.getDescription())
                 .content(postRequest.getContent())
                 .createdAt(saveLocalDate(LocalDateTime.now()))
-                .status(PostStatus.PENDING)
+                .status(Status.PENDING)
                 .tags(tags)
                 .commentCount(0L)
                 .user(user)
@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
     public PostResponse publishPost(Long postId){
         Posts posts = findPostById(postId);
         posts.setPublishedAt(saveLocalDate(LocalDateTime.now()));
-        posts.setStatus(PostStatus.APPROVED);
+        posts.setStatus(Status.APPROVED);
         return mapToResponse(postRepository.save(posts));
     }
     // User
@@ -102,7 +102,7 @@ public class PostServiceImpl implements PostService {
         posts.setTitle(postRequest.getTitle());
         posts.setDescription(postRequest.getDescription());
         posts.setContent(postRequest.getContent());
-        posts.setStatus(PostStatus.MODIFIED);
+        posts.setStatus(Status.MODIFIED);
         return mapToResponse(postRepository.save(posts));
     }
     // User
@@ -144,7 +144,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse flagPost(Long postId){
         Posts posts = findPostById(postId);
-        posts.setStatus(PostStatus.FLAGGED);
+        posts.setStatus(Status.FLAGGED);
         return mapToResponse(postRepository.save(posts));
     }
 
@@ -153,7 +153,7 @@ public class PostServiceImpl implements PostService {
     public PageResponse viewPostsByStatus(int pageNo, int pageSize, String sortBy, String sortDir, String status){
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
-        Page<Posts> postsPage = postRepository.findAllByStatus(PostStatus.valueOf(status.toUpperCase()),
+        Page<Posts> postsPage = postRepository.findAllByStatus(Status.valueOf(status.toUpperCase()),
                 PageRequest.of(pageNo,pageSize,sort));
         List<PostResponse> postResponses = postsPage.getContent().stream().map(this::mapToResponse).toList();
         return getPage(postResponses,postsPage);
@@ -167,7 +167,7 @@ public class PostServiceImpl implements PostService {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Tag mainTag = findTagByName(tag);
-        Page<Posts> postsPage = postRepository.findAllByTagsContainingIgnoreCaseAndStatus(mainTag,PostStatus.APPROVED,
+        Page<Posts> postsPage = postRepository.findAllByTagsContainingIgnoreCaseAndStatus(mainTag, Status.APPROVED,
                 PageRequest.of(pageNo,pageSize,sort));
         List<PostResponse> postResponses = postsPage.getContent().stream().map(this::mapToResponse).toList();
         return getPage(postResponses,postsPage);
@@ -182,7 +182,7 @@ public class PostServiceImpl implements PostService {
                 : Sort.by(sortBy).descending();
         User user = userRepository.findById(userId).orElseThrow(()->
                 new ResourceNotFoundException("User with id ("+userId+") does not exists"));
-        Page<Posts> postsPage = postRepository.findAllByUserAndStatus(user,PostStatus.APPROVED,
+        Page<Posts> postsPage = postRepository.findAllByUserAndStatus(user, Status.APPROVED,
                 PageRequest.of(pageNo,pageSize,sort));
         List<PostResponse> postResponses = postsPage.getContent().stream().map(this::mapToResponse).toList();
         return getPage(postResponses,postsPage);
@@ -195,11 +195,12 @@ public class PostServiceImpl implements PostService {
         checkBannedUser(user);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
-        Page<Posts> postsPage = postRepository.findAllByStatus(PostStatus.APPROVED,
+        Page<Posts> postsPage = postRepository.findAllByStatus(Status.APPROVED,
                 PageRequest.of(pageNo, pageSize, sort));
         List<PostResponse> postResponses = postsPage.getContent().stream().map(this::mapToResponse).toList();
         return getPage(postResponses, postsPage);
     }
+
     private String saveLocalDate(LocalDateTime date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm:ss a");
         return date.format(formatter);
@@ -226,12 +227,12 @@ public class PostServiceImpl implements PostService {
         }
     }
     private void checkApprovedStatus(Posts posts){
-        if(!posts.getStatus().equals(PostStatus.APPROVED)){
+        if(!posts.getStatus().equals(Status.APPROVED)){
             throw new ResourceApprovalException("Post awaiting approval");
         }
     }
     private void checkFlaggedStatus(Posts posts){
-        if(!posts.getStatus().equals(PostStatus.FLAGGED)){
+        if(!posts.getStatus().equals(Status.FLAGGED)){
             throw new ResourceApprovalException("Post has not been flagged, Please Flag before deleting");
         }
     }
