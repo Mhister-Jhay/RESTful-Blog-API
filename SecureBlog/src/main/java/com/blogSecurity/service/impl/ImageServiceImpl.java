@@ -2,6 +2,7 @@ package com.blogSecurity.service.impl;
 
 import com.blogSecurity.constant.UserDetails;
 import com.blogSecurity.dto.response.ImageResponse;
+import com.blogSecurity.enums.AccountStatus;
 import com.blogSecurity.enums.Status;
 import com.blogSecurity.exception.*;
 import com.blogSecurity.model.Image;
@@ -37,6 +38,7 @@ public class ImageServiceImpl implements ImageService {
         checkFileType(type);
         Posts posts = findPostById(postId);
         User user = UserDetails.getLoggedInUser();
+        checkUserStatus(user);
         checkPostOwner(posts,user);
         checkIfImageExist(name,posts);
         ImageResponse imageResponse = mapToResponse(imageRepository.save(Image.builder()
@@ -126,6 +128,11 @@ public class ImageServiceImpl implements ImageService {
     private void checkFileType(String type){
         if(type != null && !type.startsWith("image/")){
             throw new ResourceApprovalException("File is not an image");
+        }
+    }
+    private void checkUserStatus(User user){
+        if(user.getStatus().equals(AccountStatus.BANNED) || user.getStatus().equals(AccountStatus.SUSPENDED)){
+            throw new RestrictedAccessException("Account has been restricted from this function");
         }
     }
 }

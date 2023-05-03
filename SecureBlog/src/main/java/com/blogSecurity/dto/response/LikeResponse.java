@@ -1,6 +1,5 @@
 package com.blogSecurity.dto.response;
 
-import com.blogSecurity.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class ImageResponse {
+public class LikeResponse {
     private Long id;
-    private String name;
-    private String type;
-    private byte[] image;
-    private Long postId;
-    private Status status;
+    private Long userId;
 }

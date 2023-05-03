@@ -20,6 +20,8 @@ public class PostResponse {
     private String createdAt;
     private String publishedAt;
     private Status status;
+    private Long commentCount;
+    private Long likeCount;
     private Set<TagResponse> tags;
 
     private UserResponse user;

@@ -4,10 +4,7 @@ import com.blogSecurity.constant.PageConstant;
 import com.blogSecurity.dto.request.CommentRequest;
 import com.blogSecurity.dto.request.PostRequest;
 import com.blogSecurity.dto.response.*;
-import com.blogSecurity.service.impl.ImageServiceImpl;
-import com.blogSecurity.service.impl.CommentServiceImpl;
-import com.blogSecurity.service.impl.PostServiceImpl;
-import com.blogSecurity.service.impl.TagServiceImpl;
+import com.blogSecurity.service.impl.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +25,7 @@ public class UserController {
     private final PostServiceImpl postServiceImpl;
     private final CommentServiceImpl commentServiceImpl;
     private final ImageServiceImpl imageServiceImpl;
+    private final LikeServiceImpl likeServiceImpl;
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
     @GetMapping("/categories")
     public ResponseEntity<List<TagResponse>> viewCategories(){
@@ -128,6 +126,12 @@ public class UserController {
     @GetMapping("/posts/{postId}/images")
     public ResponseEntity<List<ImageResponse>> getPostImages(@PathVariable Long postId){
         return imageServiceImpl.getPostImages(postId);
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping("/posts/likes/{postId}")
+    public ResponseEntity<PostResponse> likePost(@PathVariable Long postId){
+        return new ResponseEntity<>(likeServiceImpl.likePost(postId),HttpStatus.CREATED);
     }
 
 }

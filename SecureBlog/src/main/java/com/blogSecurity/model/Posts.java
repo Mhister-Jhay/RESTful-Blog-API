@@ -43,6 +43,10 @@ public class Posts {
     private Long commentCount;
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE,orphanRemoval = true)
     private Set<Comment> comments;
+
+    private Long likeCount;
+    @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE,orphanRemoval = true)
+    private Set<Likes> likes;
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(
             name = "user_id",
