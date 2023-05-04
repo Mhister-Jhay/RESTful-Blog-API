@@ -1,8 +1,8 @@
 package com.blogSecurity.controller;
 
-import com.blogSecurity.dto.request.TagRequest;
-import com.blogSecurity.dto.response.TagResponse;
-import com.blogSecurity.service.impl.TagServiceImpl;
+import com.blogSecurity.postApp.application.model.TagRequest;
+import com.blogSecurity.postApp.application.model.TagResponse;
+import com.blogSecurity.postApp.domain.service.TagServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

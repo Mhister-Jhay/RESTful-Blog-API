@@ -1,13 +1,13 @@
 package com.blogSecurity.controller;
 
 import com.blogSecurity.constant.PageConstant;
-import com.blogSecurity.dto.response.CommentResponse;
-import com.blogSecurity.dto.response.ImageResponse;
-import com.blogSecurity.dto.response.PageResponse;
-import com.blogSecurity.dto.response.PostResponse;
-import com.blogSecurity.service.impl.CommentServiceImpl;
-import com.blogSecurity.service.impl.ImageServiceImpl;
-import com.blogSecurity.service.impl.PostServiceImpl;
+import com.blogSecurity.commentApp.application.model.CommentResponse;
+import com.blogSecurity.imageApp.application.model.ImageResponse;
+import com.blogSecurity.constant.PageResponse;
+import com.blogSecurity.postApp.application.model.PostResponse;
+import com.blogSecurity.commentApp.domain.service.CommentServiceImpl;
+import com.blogSecurity.imageApp.domain.service.ImageServiceImpl;
+import com.blogSecurity.postApp.domain.service.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,7 @@
 package com.blogSecurity;
 
-import com.blogSecurity.dto.request.SignUp;
-import com.blogSecurity.model.Roles;
-import com.blogSecurity.model.Tag;
-import com.blogSecurity.repository.RoleRepository;
-import com.blogSecurity.repository.TagRepository;
-import com.blogSecurity.service.impl.UserServiceImpl;
+import com.blogSecurity.authApp.domain.repository.RoleRepository;
+import com.blogSecurity.postApp.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.ApplicationArguments;
