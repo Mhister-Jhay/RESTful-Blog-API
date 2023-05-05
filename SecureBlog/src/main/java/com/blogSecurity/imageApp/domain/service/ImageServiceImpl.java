@@ -12,7 +12,9 @@ import com.blogSecurity.imageApp.domain.repository.ImageRepository;
 import com.blogSecurity.postApp.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -42,15 +44,19 @@ public class ImageServiceImpl implements ImageService {
         checkUserStatus(user);
         checkPostOwner(post,user);
         checkIfImageExist(name, post);
-        ImageResponse imageResponse = mapToResponse(imageRepository.save(Image.builder()
+        Image imageBody = imageRepository.save(Image.builder()
                 .post(post)
                 .status(Status.PENDING)
                 .name(name)
                 .type(type)
+                .imageUrl(image.getOriginalFilename())
                 .image(image.getBytes())
-                .build()));
+                .build());
+        imageBody.setImageUrl(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/posts/images/view/"+post.getId()+"/").path(
+                String.valueOf(imageBody.getId())).toUriString());
+        imageRepository.save(imageBody);
+        ImageResponse imageResponse = mapToResponse(imageBody);
         imageResponse.setPostId(post.getId());
-        imageResponse.setUrl(ServletUriComponentsBuilder.fromCurrentContextPath().path("/").path(String.valueOf(imageResponse.getId())).toUriString());
         return imageResponse;
     }
 
@@ -107,6 +113,12 @@ public class ImageServiceImpl implements ImageService {
             throw new RestrictedAccessException("Unable to delete,Image has not yet been flagged");
         }
     }
+
+    private void checkApprovedStatus(Image image){
+        if(!image.getStatus().equals(Status.APPROVED)){
+            throw new RestrictedAccessException("Unable to view Image, image not approved");
+        }
+    }
     private Post findPostById(Long postId){
         Optional<Post> optionalPosts = postRepository.findById(postId);
         if(optionalPosts.isEmpty()){
@@ -136,5 +148,16 @@ public class ImageServiceImpl implements ImageService {
         if(user.getStatus().equals(AccountStatus.BANNED) || user.getStatus().equals(AccountStatus.SUSPENDED)){
             throw new RestrictedAccessException("Account has been restricted from this function");
         }
+    }
+
+    public ResponseEntity<byte[]> viewSingleImage(Long postId, Long imageId) {
+        Post post = findPostById(postId);
+        Image imageBody = findById(imageId);
+        checkApprovedStatus(imageBody);
+        byte[] image = imageBody.getImage();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(image.length);
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
     }
 }

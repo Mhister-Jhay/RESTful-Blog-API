@@ -25,8 +25,7 @@ public class Image {
     @Lob
     @Column(nullable = false,length = 1000)
     private byte[] image;
-
-    @Column(nullable = false)
+    @Column(unique = true,nullable = false)
     private String imageUrl;
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id",referencedColumnName = "id")

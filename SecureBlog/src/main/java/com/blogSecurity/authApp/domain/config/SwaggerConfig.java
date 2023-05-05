@@ -33,33 +33,40 @@ public class SwaggerConfig {
                 .security(Collections.singletonList(new SecurityRequirement().addList("jwt")));
     }
     @Bean
-    public GroupedOpenApi usersEndpoint(){
+    public GroupedOpenApi postsEndpoint(){
         return  GroupedOpenApi
                 .builder()
-                .group("Users")
-                .pathsToMatch("/api/users/**").build();
+                .group("Posts")
+                .pathsToMatch("/api/v1/posts/post/**").build();
     }
 
     @Bean
-    public GroupedOpenApi adminEndpoint(){
+    public GroupedOpenApi commentEndpoint(){
         return  GroupedOpenApi
                 .builder()
-                .group("Admin")
-                .pathsToMatch("/api/admin/**").build();
+                .group("Comments")
+                .pathsToMatch("/api/v1/posts/comments/**").build();
     }
     @Bean
-    public GroupedOpenApi superAdminEndpoint(){
+    public GroupedOpenApi likeEndpoint(){
         return  GroupedOpenApi
                 .builder()
-                .group("Super_Admin")
-                .pathsToMatch("/api/superAdmin/**").build();
+                .group("Likes")
+                .pathsToMatch("/api/v1/posts/like/**").build();
+    }
+    @Bean
+    public GroupedOpenApi imageEndpoint(){
+        return  GroupedOpenApi
+                .builder()
+                .group("Image")
+                .pathsToMatch("/api/v1/posts/images/**").build();
     }
     @Bean
     public GroupedOpenApi authEndpoint(){
         return  GroupedOpenApi
                 .builder()
                 .group("Authentication")
-                .pathsToMatch("/api/auth/**").build();
+                .pathsToMatch("/api/v1/auth/**").build();
     }
 
 }
